@@ -139,8 +139,6 @@ export const sendEmailToUsers = async (req, res, next) => {
                          <p> If you dont wnat to recienve this email, please click here to <a href="${development}/api/user/unsubscribe/${user._id}">unsubscribe</a> </p>
                        </div>`,
         }));
-
-        console.log(emails);
         // for free tier we can only send 100 mails per day
         await sgMail.send(emails);
 
