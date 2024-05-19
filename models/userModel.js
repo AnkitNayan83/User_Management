@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
         ref: "List",
         required: true,
     },
+    subscribed: {
+        type: Boolean,
+        default: true,
+    },
     customProperties: Map,
 });
 

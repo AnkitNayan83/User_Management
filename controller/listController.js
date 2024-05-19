@@ -2,13 +2,14 @@ import List from "../models/listModel.js";
 import User from "../models/userModel.js";
 import fs from "fs";
 import csv from "csv-parser";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import sgMail from "@sendgrid/mail";
+import { development } from "../domains.js";
 
 dotenv.config();
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const EMAIL = process.env.EMAIL;
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
 /**
  * Creates a new list with the given title and custom properties.
@@ -119,40 +120,33 @@ export const uploadUserToList = async (req, res, next) => {
  */
 
 export const sendEmailToUsers = async (req, res, next) => {
-    const listId = req.params.id;
-    const list = await List.findById(listId);
-    if (!list) {
-        return next({ message: "List not found", status: 404 });
-    }
-
-    const users = await User.find({ listId });
-
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: EMAIL,
-            pass: EMAIL_PASSWORD,
-        },
-    });
-
-    const emailPromises = users.map((user) => {
-        const mailOptions = {
-            from: EMAIL,
-            to: user.email,
-            subject: "Hello from our app",
-            html: `<div>
-                    <h1>Hello ${user.name}</h1>
-                    <p> Thankyou for signing up with your email ${user.email}. We have recieved your data.</p>
-                </div>`,
-        };
-
-        return transporter.sendMail(mailOptions);
-    });
-
     try {
-        await Promise.all(emailPromises);
-        res.status(200).send({ message: "Emails sent successfully" });
+        const listId = req.params.id;
+        const list = await List.findById(listId);
+        if (!list) {
+            return next({ message: "List not found", status: 404 });
+        }
+
+        const users = await User.find({ listId, subscribed: true });
+
+        const emails = users.map((user) => ({
+            to: user.email,
+            from: "ankitchamp13@gmail.com",
+            subject: `Hello ${user.name}`,
+            html: `<div>
+                         <h1>Hello ${user.name}</h1>
+                         <p>Thank you for signing up with your email ${user.email}. We have received your data.</p>
+                         <p> If you dont wnat to recienve this email, please click here to <a href="${development}/api/user/unsubscribe/${user._id}">unsubscribe</a> </p>
+                       </div>`,
+        }));
+
+        console.log(emails);
+        // for free tier we can only send 100 mails per day
+        await sgMail.send(emails);
+
+        res.status(200).json({ message: "Emails sent successfully" });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

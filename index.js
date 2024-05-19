@@ -4,6 +4,7 @@ import morgan from "morgan";
 
 import connectDB from "./lib/db.js";
 import listRotes from "./routes/listRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 connectDB();
 
 app.use("/api/lists", listRotes);
+app.use("/api/user", userRoutes);
 
 app.get("*", (req, res) => {
     res.send("404 Route not found");
