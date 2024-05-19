@@ -44,14 +44,14 @@ Start the Node.js server:
 
 
 ## API Endpoints
-
+```
 POST /api/lists/ : Create a new list.
 POST /api/lists/:id/user : Upload a CSV file to add users.
 POST /api/lists/:id/send-email : Send emails to users in the list.
 
 GET /api/user/unsubscribe/:id : To unsubscribe from emails.
 GET /api/user/subscribe/:id : To subscribe to emails.
-
+```
 
 ## Author
 
