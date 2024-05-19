@@ -4,7 +4,7 @@ import fs from "fs";
 import csv from "csv-parser";
 import dotenv from "dotenv";
 import sgMail from "@sendgrid/mail";
-import { development } from "../domains.js";
+import { development, production } from "../domains.js";
 
 dotenv.config();
 
@@ -136,9 +136,10 @@ export const sendEmailToUsers = async (req, res, next) => {
             html: `<div>
                          <h1>Hello ${user.name}</h1>
                          <p>Thank you for signing up with your email ${user.email}. We have received your data.</p>
-                         <p> If you dont wnat to recienve this email, please click here to <a href="${development}/api/user/unsubscribe/${user._id}">unsubscribe</a> </p>
+                         <p> If you dont wnat to recienve this email, please click here to <a href="${production}/api/user/unsubscribe/${user._id}">unsubscribe</a> </p>
                        </div>`,
         }));
+
         // for free tier we can only send 100 mails per day
         await sgMail.send(emails);
 
