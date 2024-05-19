@@ -10,6 +10,15 @@ dotenv.config();
 const EMAIL = process.env.EMAIL;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
+/**
+ * Creates a new list with the given title and custom properties.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the list is successfully created.
+ * @throws {Error} - If the title is missing in the request body.
+ */
 export const createList = async (req, res, next) => {
     try {
         const { title, customProperties } = req.body;
@@ -28,6 +37,15 @@ export const createList = async (req, res, next) => {
     }
 };
 
+/**
+ * Extract user data from csv file and stores it in the list. Takes list id int the request params.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the users are successfully uploaded to the list.
+ * @throws {Error} - If the list is not found or there is an error during the upload process.
+ */
 export const uploadUserToList = async (req, res, next) => {
     try {
         const listId = req.params.id;
@@ -89,6 +107,16 @@ export const uploadUserToList = async (req, res, next) => {
         next(error);
     }
 };
+
+/**
+ * Sends emails to all users in a list.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the emails are sent successfully.
+ * @throws {Error} - If the list is not found or there is an error during the email sending process.
+ */
 
 export const sendEmailToUsers = async (req, res, next) => {
     const listId = req.params.id;
