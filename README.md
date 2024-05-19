@@ -53,6 +53,8 @@ GET /api/user/unsubscribe/:id : To unsubscribe from emails.
 GET /api/user/subscribe/:id : To subscribe to emails.
 ```
 
+   ### [API DOCS](https://documenter.getpostman.com/view/18993037/2sA3QmCtrR)
+
 ## Author
 
 [Ankit Nayan](https://github.com/AnkitNayan83)
