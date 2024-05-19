@@ -131,7 +131,7 @@ export const sendEmailToUsers = async (req, res, next) => {
 
         const emails = users.map((user) => ({
             to: user.email,
-            from: "ankitchamp13@gmail.com",
+            from: EMAIL,
             subject: `Hello ${user.name}`,
             html: `<div>
                          <h1>Hello ${user.name}</h1>
