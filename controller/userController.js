@@ -34,7 +34,7 @@ export const subscribe = async (req, res, next) => {
 
         user.subscribed = true;
         await user.save();
-        res.status(200).json({ message: "user unsubscribed successfully" });
+        res.status(200).json({ message: "user subscribed successfully" });
     } catch (error) {
         next(error);
     }
